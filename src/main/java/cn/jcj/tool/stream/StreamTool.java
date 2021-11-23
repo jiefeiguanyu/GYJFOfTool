@@ -99,7 +99,9 @@ public class StreamTool {
      * @since: 一个模糊查询方法，需要给它一个list、要查找的属性名称、模糊查询关键字
      */
     public static <T> List<T> filterQuery(List<T> list, String attributeName, String filterString) {
-
+        if (list==null||list.size()==0) {
+            return list;
+        }
         List<T> tList = list.stream().filter(c -> {
             try {
                 Class<?> aClass = c.getClass();
@@ -130,10 +132,15 @@ public class StreamTool {
      * @return StreamPage
      */
     public static <O> StreamPage<O> pageStream(List<O> list, Integer pageIndex, Integer pageSize) {
+
         StreamPage<O> streamPage = new StreamPage<>();
         streamPage.setPageNumber(pageIndex);
         streamPage.setPageSize(pageSize);
+        if (list==null||list.size()==0) {
+            return streamPage;
+        }
         streamPage.setTotal(list.size());
+
         //单精度或者双精度数相除或者是和整数相除才会进行除尽操作，否则整数和整数相除只会向下取整
         streamPage.setPageCount((int) Math.ceil((double) streamPage.getTotal() / (double) pageSize));
         Integer starNumber = (pageIndex - 1) * pageSize;
