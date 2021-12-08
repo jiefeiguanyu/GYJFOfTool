@@ -5,15 +5,22 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 /**
+ * https://github.com/jiefeiguanyu/GYJFOfTool
+ * https://mvnrepository.com/artifact/io.github.jiefeiguanyu/GYJFOfTool
+ *
  * @since 2021/10/25 16:22   @author  jcj  @version 1.00
  * Description StreamPage通过Stream实现分页的分页类
  */
 public class StreamPage<O> implements Serializable {
-
+    //当前页码
     private Integer pageNumber;
+    //每页大小
     private Integer pageSize;
+    //总记录数（总条数）
     private Integer total;
+    //总页数
     private Integer pageCount;
+    //集合
     private List<O> list;
 
     public Integer getPageNumber() {

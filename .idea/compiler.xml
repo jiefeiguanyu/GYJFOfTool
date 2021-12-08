@@ -9,5 +9,8 @@
         <module name="GYJFOfTool" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gyjf_of_tool" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

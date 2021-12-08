@@ -4,13 +4,18 @@ import cn.jcj.emnu.Sort;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 /**
- * @since 2021/8/23 13:02   @author  关于皆非  @version 4.00
+ * https://github.com/jiefeiguanyu/GYJFOfTool
+ * https://mvnrepository.com/artifact/io.github.jiefeiguanyu/GYJFOfTool
+ *
+ * @since 2021/8/23 13:02   @author  关于皆非  @version 4.01
  * <br>描述： StreamTool工具类，通过反射来实现
  */
 @Component
@@ -33,7 +38,7 @@ public class StreamTool {
 
         collect = list.stream().sorted(getSorted(attributeName, sort)).collect(Collectors.toList());
 
-        System.out.println((errorCount > 0 ? "出现错误！给予的属性可能不存在！" + errorCount : "排序成功！"));
+        System.out.println((errorCount > 0 ? "出现错误！给予的属性可能不存在！尝试次数：" + errorCount : "排序成功！"));
         list.clear();
         list.addAll(collect);
 
@@ -47,8 +52,7 @@ public class StreamTool {
                 declaredField.setAccessible(true);
                 Field declaredField1 = s2.getClass().getDeclaredField(attributeName);
                 declaredField1.setAccessible(true);
-
-                if (
+                  if (
                         (declaredField.getType() == Integer.class && declaredField1.getType() == Integer.class)
                                 ||
                                 (declaredField.getType() == int.class && declaredField1.getType() == int.class)) {
@@ -99,7 +103,7 @@ public class StreamTool {
      * @since: 一个模糊查询方法，需要给它一个list、要查找的属性名称、模糊查询关键字
      */
     public static <T> List<T> filterQuery(List<T> list, String attributeName, String filterString) {
-        if (list==null||list.size()==0) {
+        if (list == null || list.size() == 0) {
             return list;
         }
         List<T> tList = list.stream().filter(c -> {
@@ -134,9 +138,9 @@ public class StreamTool {
     public static <O> StreamPage<O> pageStream(List<O> list, Integer pageIndex, Integer pageSize) {
 
         StreamPage<O> streamPage = new StreamPage<>();
-        streamPage.setPageNumber(pageIndex);
-        streamPage.setPageSize(pageSize);
-        if (list==null||list.size()==0) {
+        streamPage.setPageNumber(pageIndex != null ? pageIndex : 1);
+        streamPage.setPageSize(pageSize != null ? pageSize : 4);
+        if (list == null || list.size() == 0) {
             return streamPage;
         }
         streamPage.setTotal(list.size());
@@ -150,8 +154,6 @@ public class StreamTool {
         streamPage.setList(collect);
         return streamPage;
     }
-
-
     /*
      *
      * -------------------实例方法区-----------------------
@@ -174,6 +176,8 @@ public class StreamTool {
 
     /*
      *       更新日志
+     * 4.01
+     * 设置分页的默认值和非空判断
      *
      *
      * 4.0
