@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * https://github.com/jiefeiguanyu/GYJFOfTool
+ * https://mvnrepository.com/artifact/io.github.jiefeiguanyu/GYJFOfTool
+ *
  * @since 2021/10/26   @author  关于皆非  @version 2.00
  * Description 用来处理对象检查格式的工具类
  */
@@ -51,9 +54,9 @@ public class ValidatedTool {
      *
      * */
 
-   public HashMap validatedPatternExample(BindingResult br){
-       return ValidatedTool.validatedPattern(br);
-   }
+    public HashMap validatedPatternExample(BindingResult br) {
+        return ValidatedTool.validatedPattern(br);
+    }
 
 
     /*

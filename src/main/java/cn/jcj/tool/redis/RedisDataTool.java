@@ -1,6 +1,7 @@
 package cn.jcj.tool.redis;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -18,23 +19,37 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * https://github.com/jiefeiguanyu/GYJFOfTool
+ * https://mvnrepository.com/artifact/io.github.jiefeiguanyu/GYJFOfTool
+ *
  * @since 2021/7/30  @author  关于皆非  @version 5.10
  * Description 用来实现redis与数据库同步数据的功能。将其定义为一个配置类，从根源解除键保存时的乱码
  */
 @SuppressWarnings("unchecked")
 @Configuration
+@ConfigurationProperties(prefix = "gyjf.redis-tool")
 public class RedisDataTool {
     //项目名称
     static String projectKey;
-    //前缀
-    static String PREFIXKEY = "JFRDT";
+
+    /**
+     * <table style="border: aqua solid 1px;background-color: white;">
+     *     <tr>
+     *         <td>
+     *             <h1 style="color:red">生成RedisKey时的前缀</h1>
+     *         </td>
+     *     </tr>
+     * </table>
+     *
+     */
+    static String prefixKey = "JFRDT";
 
     //内置静态RedisTemplate
-    static RedisTemplate<Object,Object> redisTemplate=null;
+    static RedisTemplate<Object, Object> redisTemplate = null;
 
     //设置redis的序列化方式，避免出现乱码
     @Bean
-    public RedisTemplate<Object,Object> redisTemplate(RedisConnectionFactory factory) {
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<Object, Object>();
         redisTemplate.setConnectionFactory(factory);
         //key序列化方式;（不然会出现乱码;）,但是如果方法上有boolean等非String类型的话，会出现问题，所以一定要toSting啊
@@ -43,6 +58,7 @@ public class RedisDataTool {
         redisTemplate.setHashKeySerializer(redisSerializer);
         return redisTemplate;
     }
+
     /**
      * <br>使用正则表达式来删除对应key的redis数据，返回响应情况
      *
@@ -62,6 +78,7 @@ public class RedisDataTool {
         }
         return "OK Succeed DeleteKeys:" + keys;
     }
+
     /**
      * <br>调用这个方法来实现将自动生成的key删除
      *
@@ -69,8 +86,9 @@ public class RedisDataTool {
      * @author 关于皆非
      */
     public static String deleteRedisAutoKey() {
-        return deleteRedisData(PREFIXKEY + projectKey + "*");
+        return deleteRedisData(prefixKey + projectKey + "*");
     }
+
     /**
      * @param key           没错！这只是一个key,用来教redis怎么储存到redis中ヾ(•ω•`)o
      * @param daoImpl       daoImpl？啊，我没有实现类啊？怎么办？不用担心！我们只需要dao的接口就可以了！
@@ -87,9 +105,11 @@ public class RedisDataTool {
     public static <D, T, C> List<T> queryRedis(String key, D daoImpl, String daoMethodName, C parameters, Class<T> objectClass) {
         return queryOverloadAutoKey(daoImpl, daoMethodName, objectClass, key, parameters, true);
     }
+
     public static <D, T> List<T> queryRedis(String key, D daoImpl, String daoMethodName, Class<T> objectClass) {
         return queryOverloadAutoKey(daoImpl, daoMethodName, objectClass, key, null, false);
     }
+
     /**
      * @param daoImpl       在这里，您只需要传入一个dao接口
      * @param daoMethodName 有了dao接口，但您得想办法让我的工具知道您想要执行的是什么方法，然后剩下的就交给我的工具了！
@@ -105,15 +125,17 @@ public class RedisDataTool {
     public static <D, T, C> List<T> queryRedisAutoKey(D daoImpl, String daoMethodName, Class<T> objectClass, C parameters) {
         return queryOverloadAutoKey(daoImpl, daoMethodName, objectClass, null, parameters, true);
     }
+
     public static <D, T> List<T> queryRedisAutoKey(D daoImpl, String daoMethodName, Class<T> objectClass) {
         return queryOverloadAutoKey(daoImpl, daoMethodName, objectClass, null, null, false);
     }
+
     private static <D, T, C> List<T> queryOverloadAutoKey(D daoImpl, String daoMethodName, Class<T> objectClass, String key, C parameters, Boolean tag) {
         //设置更复杂的key，更好的避免数据重复
         if (key == null || key.equals("") || key.isEmpty()) {
-            key = PREFIXKEY + projectKey + daoImpl.getClass().getName() + AutoKey(parameters);
+            key = prefixKey + projectKey + daoImpl.getClass().getName() + AutoKey(parameters);
         }
-        ValueOperations<Object,Object> valueOperations = redisTemplate.opsForValue();
+        ValueOperations<Object, Object> valueOperations = redisTemplate.opsForValue();
         List<T> redisList = (List<T>) valueOperations.get(key);
         try {
             if (redisList == null || redisList.isEmpty()) {
@@ -145,11 +167,13 @@ public class RedisDataTool {
         }
         return redisList;
     }
+
     /**
      * 传入一个对象，拼接成一大串字符串
      * 可以通过反射获得一大串由对象的类名、属性名、属性值拼接而成的key
+     *
      * @param parameters 传入任意对象
-     * @param <C> 传入参数的类型
+     * @param <C>        传入参数的类型
      * @return String
      */
     public static <C> String AutoKey(C parameters) {
@@ -216,30 +240,6 @@ public class RedisDataTool {
     }
 
 
-    //获取并设置静态属性的项目KEY(由项目名与项目端口号组成)
-    @Value("${spring.application.name}${server.port}")
-    void setprojectKey(String projectKey) {
-        RedisDataTool.projectKey = projectKey;
-    }
-
-    //注入静态RedisTemplate
-    @Resource(name = "redisTemplate")
-    void setRestTemplate(RedisTemplate<Object, Object> redisTemplate) {
-        if (RedisDataTool.redisTemplate == null) {
-            RedisDataTool.redisTemplate = redisTemplate;
-        }
-        System.out.println("redisTemplate = " + redisTemplate);
-    }
-
-    /**
-     * 设置前缀唯一标识，它将会被拼接在最前面
-     *
-     * @param PREFIXKEY 定义一个唯一标识，用于rediskey的组合，默认为"JFRDT"
-     */
-    public void setPREFIXKEY(String PREFIXKEY) {
-        RedisDataTool.PREFIXKEY = PREFIXKEY;
-    }
-
     /*
      *
      * -------------------实例方法区-----------------------
@@ -291,10 +291,41 @@ public class RedisDataTool {
     public void setKeyValueExample(String key, Object value, Long outTime, TimeUnit unit) {
         RedisDataTool.setKeyValue(key, value, outTime, unit);
     }
+    /*
+     *
+     * -------------------get和set及初始化方法区-----------------------
+     *
+     *
+     * */
+    //获取并设置静态属性的项目KEY(由项目名与项目端口号组成)
+    @Value("${spring.application.name}${server.port}")
+    void setprojectKey(String projectKey) {
+        RedisDataTool.projectKey = projectKey;
+    }
+
+    //注入静态RedisTemplate
+    @Resource(name = "redisTemplate")
+    void setRestTemplate(RedisTemplate<Object, Object> redisTemplate) {
+        if (RedisDataTool.redisTemplate == null) {
+            RedisDataTool.redisTemplate = redisTemplate;
+        }
+        System.out.println("redisTemplate = " + redisTemplate);
+    }
+
+    public void setPrefixKey(String prefixKey) {
+        RedisDataTool.prefixKey = prefixKey;
+    }
+
+    public String getPrefixKey() {
+        return prefixKey;
+    }
+
 }
 
 /*
  *              更新日志 有BUG加Q2476535821
+ * 5.20 2021/12/1
+ *
  *
  * 5.10 2021/11/15
  * 解决一个严重的漏洞

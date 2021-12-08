@@ -7,6 +7,9 @@ import cn.jcj.tool.stream.StreamTool;
 import org.springframework.stereotype.Component;
 
 /**
+ * https://github.com/jiefeiguanyu/GYJFOfTool
+ * https://mvnrepository.com/artifact/io.github.jiefeiguanyu/GYJFOfTool
+ *
  * @since 2021/11/6 8:34   @author jcj  @version 1.00
  * Description 将所有工具集成在一起
  */
