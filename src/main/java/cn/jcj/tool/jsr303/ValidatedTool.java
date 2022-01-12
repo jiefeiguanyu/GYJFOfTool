@@ -18,7 +18,6 @@ import java.util.List;
 public class ValidatedTool {
 
     /**
-     * <br>
      * 检查传过来的BindingResult对象，如果判定为异常，那么将会返回错误信息(一个HashMap)
      * 否则返回一个null
      *
