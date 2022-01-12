@@ -4,8 +4,6 @@ import cn.jcj.emnu.Sort;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,12 +23,13 @@ public class StreamTool {
     static Integer errorCount = 0;
 
     /**
+     * 升序排序（最小的值在上面）
+     *
      * @param list          需要排序的集合
      * @param attributeName 指定通过那个属性升序
      * @param sort          StreamTool自带的枚举选项，用来选择升序或降序
      * @param <T>           返回list的类型
      * @author : 关于皆非
-     * @since: Description: 升序排序（最小的值在上面）
      */
     public static <T> void sort(List<T> list, String attributeName, Sort sort) {
 
@@ -52,7 +51,7 @@ public class StreamTool {
                 declaredField.setAccessible(true);
                 Field declaredField1 = s2.getClass().getDeclaredField(attributeName);
                 declaredField1.setAccessible(true);
-                  if (
+                if (
                         (declaredField.getType() == Integer.class && declaredField1.getType() == Integer.class)
                                 ||
                                 (declaredField.getType() == int.class && declaredField1.getType() == int.class)) {
@@ -94,13 +93,14 @@ public class StreamTool {
 
 
     /**
+     * 一个模糊查询方法，需要给它一个list、要查找的属性名称、模糊查询关键字
+     *
      * @param list          一个要查找的list
      * @param attributeName 要查找的对应属性名
      * @param filterString  模糊查找的条件
      * @param <T>           返回list的类型
      * @return List
      * @author : 关于皆非
-     * @since: 一个模糊查询方法，需要给它一个list、要查找的属性名称、模糊查询关键字
      */
     public static <T> List<T> filterQuery(List<T> list, String attributeName, String filterString) {
         if (list == null || list.size() == 0) {
@@ -147,13 +147,14 @@ public class StreamTool {
 
         //单精度或者双精度数相除或者是和整数相除才会进行除尽操作，否则整数和整数相除只会向下取整
         streamPage.setPageCount((int) Math.ceil((double) streamPage.getTotal() / (double) pageSize));
-        Integer starNumber = (pageIndex - 1) * pageSize;
-        Integer endNumber = starNumber + pageSize;
+        int starNumber = (pageIndex - 1) * pageSize;
+        int endNumber = starNumber + pageSize;
         //Stream的skip与第一个的limit是界定一个分页范围，第二个limit是用来解决有时starNumber小于endNumber的时候出现的一个严重漏洞
         List<O> collect = list.stream().skip(starNumber).limit(endNumber).limit(pageSize).collect(Collectors.toList());
         streamPage.setList(collect);
         return streamPage;
     }
+
     /*
      *
      * -------------------实例方法区-----------------------

@@ -8,6 +8,25 @@ package cn.jcj.emnu;
  * Description Stream需要用到的枚举（虽然没有必要）
  */
 public enum Sort {
-    ASC,
-    DESC,
+    ASC("正序", true),
+    DESC("倒序", false);
+
+    String str;
+    boolean boole;
+
+    Sort() {
+    }
+
+    Sort(String str, boolean boole) {
+        this.str = str;
+        this.boole = boole;
+    }
+
+    public String getStr() {
+        return str;
+    }
+
+    public boolean isBoole() {
+        return boole;
+    }
 }

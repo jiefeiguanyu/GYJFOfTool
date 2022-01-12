@@ -41,7 +41,7 @@ public class AdministrativeCB {
      */
     public static String analysisCode(String dPCode) {
         StringBuilder sb = new StringBuilder();
-        dPCode=zeroFill(dPCode);
+        dPCode = zeroFill(dPCode);
         String firstOrder = zeroFill(dPCode.substring(0, 3));
         sb.append(base.get(firstOrder));
         String secondStage = zeroFill(dPCode.substring(0, 4));
@@ -52,7 +52,19 @@ public class AdministrativeCB {
         sb.append(base.get(dPkey));
         return sb.toString();
     }
+
     private static String zeroFill(String code) {
         return StringTool.zeroFill(code, 6, false);
+    }
+
+    /*
+     *
+     * -------------------实例方法区-----------------------
+     * 将静态方法以实例方法调用，然后整个工具类整合到GYJFOfTool中方便自动注入调用
+     *
+     *
+     * */
+    public String analysisCodeExample(String dPCode) {
+        return AdministrativeCB.analysisCode(dPCode);
     }
 }

@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * https://github.com/jiefeiguanyu/GYJFOfTool
  * https://mvnrepository.com/artifact/io.github.jiefeiguanyu/GYJFOfTool
  *
- * @since 2021/7/30  @author  关于皆非  @version 5.10
+ * @since 2021/7/30  @author  关于皆非  @version 5.20
  * Description 用来实现redis与数据库同步数据的功能。将其定义为一个配置类，从根源解除键保存时的乱码
  */
 @SuppressWarnings("unchecked")
@@ -40,7 +40,6 @@ public class RedisDataTool {
      *         </td>
      *     </tr>
      * </table>
-     *
      */
     static String prefixKey = "JFRDT";
 
@@ -60,7 +59,7 @@ public class RedisDataTool {
     }
 
     /**
-     * <br>使用正则表达式来删除对应key的redis数据，返回响应情况
+     * 使用正则表达式来删除对应key的redis数据，返回响应情况
      *
      * @param pattern 正则表达式，用来查询你需要删除的key
      * @return String 返回一条处理结果信息
@@ -80,7 +79,7 @@ public class RedisDataTool {
     }
 
     /**
-     * <br>调用这个方法来实现将自动生成的key删除
+     * 调用这个方法来实现将自动生成的key删除
      *
      * @return String 返回一条处理结果信息
      * @author 关于皆非
@@ -90,6 +89,8 @@ public class RedisDataTool {
     }
 
     /**
+     * 判断并查询然后将数据存入redis的方法
+     *
      * @param key           没错！这只是一个key,用来教redis怎么储存到redis中ヾ(•ω•`)o
      * @param daoImpl       daoImpl？啊，我没有实现类啊？怎么办？不用担心！我们只需要dao的接口就可以了！
      * @param daoMethodName 有了dao接口，但你得想办法让我们知道您想要执行的是什么方法，然后剩下的就交给我们了
@@ -100,7 +101,6 @@ public class RedisDataTool {
      * @param <C>           为dao层传值的类型
      * @return List
      * @author : 关于皆非
-     * @since: Description: 判断并查询然后将数据存入redis的方法
      */
     public static <D, T, C> List<T> queryRedis(String key, D daoImpl, String daoMethodName, C parameters, Class<T> objectClass) {
         return queryOverloadAutoKey(daoImpl, daoMethodName, objectClass, key, parameters, true);
@@ -111,6 +111,8 @@ public class RedisDataTool {
     }
 
     /**
+     * queryRedisAutoKey系列无需自己手动设置key了，当然它一样可以传一个参
+     *
      * @param daoImpl       在这里，您只需要传入一个dao接口
      * @param daoMethodName 有了dao接口，但您得想办法让我的工具知道您想要执行的是什么方法，然后剩下的就交给我的工具了！
      * @param objectClass   指定返回一个什么类型的List集合，就比如：Object.class
@@ -120,7 +122,6 @@ public class RedisDataTool {
      * @param <C>           为dao层传值的类型
      * @return List
      * @author : 关于皆非
-     * @since: Description: queryRedisAutoKey系列无需自己手动设置key了，当然它一样可以传一个参
      */
     public static <D, T, C> List<T> queryRedisAutoKey(D daoImpl, String daoMethodName, Class<T> objectClass, C parameters) {
         return queryOverloadAutoKey(daoImpl, daoMethodName, objectClass, null, parameters, true);
@@ -291,6 +292,7 @@ public class RedisDataTool {
     public void setKeyValueExample(String key, Object value, Long outTime, TimeUnit unit) {
         RedisDataTool.setKeyValue(key, value, outTime, unit);
     }
+
     /*
      *
      * -------------------get和set及初始化方法区-----------------------
@@ -325,7 +327,7 @@ public class RedisDataTool {
 /*
  *              更新日志 有BUG加Q2476535821
  * 5.20 2021/12/1
- *
+ * 加入从配置文件配置rediskey生成前缀
  *
  * 5.10 2021/11/15
  * 解决一个严重的漏洞

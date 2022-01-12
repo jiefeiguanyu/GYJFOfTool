@@ -1,5 +1,6 @@
 package cn.jcj.tool.string;
 
+import cn.jcj.tool.number.NumberTool;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -20,6 +21,8 @@ public class StringTool {
      * @param length    补零后字符串的长度
      * @param frontBack true为前补零，false为后补零
      * @return 返回补充后的String对象
+     * <p>
+     * 数字的小数位补零可参考：{@link NumberTool}
      */
     public static String zeroFill(String str, Integer length, boolean frontBack) {
         return frontBack ? String.format("%0" + length + "d", Integer.parseInt(str)) : FillString(str, length, "0", false);
@@ -57,4 +60,35 @@ public class StringTool {
         int day = Integer.parseInt(str.substring(6));
         return LocalDate.of(year, month, day);
     }
+
+
+    /*
+     *
+     * -------------------实例方法区-----------------------
+     * 将静态方法以实例方法调用，然后整个工具类整合到GYJFOfTool中方便自动注入调用
+     *
+     *
+     * */
+
+    public String zeroFillExample(String str, Integer length, boolean frontBack) {
+        return StringTool.zeroFill(str, length, frontBack);
+    }
+
+    public String FillStringExample(String str, Integer length, String word, boolean frontBack) {
+        return StringTool.FillString(str, length, word, frontBack);
+    }
+
+    public LocalDate dateStringAnalysisExample(String str) {
+        return StringTool.dateStringAnalysis(str);
+    }
+
+
 }
+/*
+ *     更新日志 有BUG加Q2476535821
+ * 1.0 2021/12/7
+ * 创建StringTool类
+ * 加入zeroFill方法及实例
+ * 加入FillString方法及实例
+ * 加入dateStringAnalysis方法及实例
+ */
