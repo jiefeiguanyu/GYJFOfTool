@@ -1,14 +1,13 @@
 package cn.jcj;
 
 import cn.jcj.specificTools.ICardAnalysis.AdministrativeCB;
-import cn.jcj.specificTools.ICardAnalysis.IDCardAnalysis;
+import cn.jcj.specificTools.ICardAnalysis.IDCardAnalysisTool;
 import cn.jcj.tool.jsr303.ValidatedTool;
 import cn.jcj.tool.redis.RedisDataTool;
 import cn.jcj.tool.stream.StreamTool;
 
 import cn.jcj.tool.string.StringTool;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 /**
  * https://github.com/jiefeiguanyu/GYJFOfTool
@@ -28,7 +27,7 @@ public class GYJFOfTool {
 
     private StringTool stringTool;
 
-    private IDCardAnalysis idCardAnalysis;
+    private IDCardAnalysisTool idCardAnalysisTool;
 
     private AdministrativeCB administrativeCB;
 
@@ -47,9 +46,9 @@ public class GYJFOfTool {
      *
      * @return IDCardAnalysis
      */
-    public IDCardAnalysis getIdCardAnalysis() {
-        if (idCardAnalysis == null) idCardAnalysis = new IDCardAnalysis();
-        return idCardAnalysis;
+    public IDCardAnalysisTool getIdCardAnalysisTool() {
+        if (idCardAnalysisTool == null) idCardAnalysisTool = new IDCardAnalysisTool();
+        return idCardAnalysisTool;
     }
 
     /**

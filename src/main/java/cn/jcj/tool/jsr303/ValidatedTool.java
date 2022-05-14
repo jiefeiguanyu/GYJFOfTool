@@ -24,7 +24,7 @@ public class ValidatedTool {
      * @param br 需要一个BindingResult对象
      * @return HashMap
      */
-    public static HashMap validatedPattern(BindingResult br) {
+    public static HashMap<?,?> validatedPattern(BindingResult br) {
         HashMap<String, String> map = new HashMap<String, String>();
         if (br.hasErrors()) {
 
@@ -40,8 +40,6 @@ public class ValidatedTool {
             }
             return map;
         }
-
-
         return null;
     }
 

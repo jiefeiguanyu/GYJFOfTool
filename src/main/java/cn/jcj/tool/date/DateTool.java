@@ -141,7 +141,6 @@ public class DateTool {
 
 /*
  *       更新日志 有BUG加Q2476535821
- *
  *  1.00 2022/1/4
  *  创建DateTool类。
  *  加入dateFormat方法及一些重载

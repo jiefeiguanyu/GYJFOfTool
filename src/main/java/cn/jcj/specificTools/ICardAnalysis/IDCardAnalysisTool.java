@@ -15,7 +15,7 @@ import java.time.LocalDate;
  * Description 身份证解析工具 1.00
  */
 @Component
-public class IDCardAnalysis {
+public class IDCardAnalysisTool {
     /**
      * 解析身份证卡号
      *
@@ -41,7 +41,7 @@ public class IDCardAnalysis {
      *
      * */
     public AnalysisResult analysisExample(String cardNo) {
-        return IDCardAnalysis.analysis(cardNo);
+        return IDCardAnalysisTool.analysis(cardNo);
     }
 
 
